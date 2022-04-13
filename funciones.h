@@ -1,24 +1,27 @@
-//
-// Created by jovan on 4/9/2022.
-//
 #include <stdlib.h>
 #include <stdio.h>
+
+//------------------------------Estructuras--------------------------------
 
 typedef struct torrePizzas
 {
     int sePudo; // Si se pudo leer el archivo vale 1 en caso contrario 0.
-    int cantidad;
-    int *masas;
+    int cantidad; //Cuantas masas de pizza hay
+    int * masas; //Array que contiene los diametros de las masas
 } torrePizzas;
 
 typedef struct volteretas
 {
-    int cantidad;
-    int * swaps;
+    int cantidad; //Cuantas volteretas se han hecho
+    int * swaps; //Array que contiene la secuencia de volteretas
 }volteretas;
 
+//-----------------------------Funciones----------------------------------
 
-void leerArchivo(char *nombreArchivo, torrePizzas *lectura)
+//Entrada: nombre del archivo ("string") y puntero a estructura del tipo torrePizzas, donde se guardaran los datos de las masas
+//Salida: no entrega, ya que se utiliza paso por referencia
+//Funcion: Lee el archivo y si es que existe guarda sus datos en la estructura del tipo torrePizzas.
+void leerArchivo(char * nombreArchivo, torrePizzas *lectura)
 {
     FILE *archivo = fopen(nombreArchivo, "r");
     int aux;
@@ -35,6 +38,10 @@ void leerArchivo(char *nombreArchivo, torrePizzas *lectura)
     fclose(archivo);
 }
 
+//Entrada: Array de enteros que contiene los diametros de las masas, entero que representa la cantidad de masas presentes en la "torre" 
+//y un entero que indica desde donde se empieza a buscar el mayor numero.
+//Salida: un entero que representa una posicion dentro del array
+//Funcion: Encuentra el mayor numero dentro de un subgrupo de un array (conjunto [desde,n]) y devuelve su posicion en el array
 int encontrarMayor(int *masas, int n, int desde)
 {
     int mayor = masas[desde];
@@ -50,6 +57,10 @@ int encontrarMayor(int *masas, int n, int desde)
     return indice;
 }
 
+//Entrada: Array de enteros que contiene los diametros de las masas, entero que representa la cantidad de masas presentes en la "torre" 
+//y un entero que indica desde donde se realiza la voltereta.
+//Salida: No entrega, ya que trabaja sobre punteros.
+//Funcion: Realiza una voltereta desde una posicion hasta la n (invierte el orden de un subgrupo)
 void swap(int *masas, int n, int desde)
 {
     int aux;
@@ -62,7 +73,9 @@ void swap(int *masas, int n, int desde)
     }
 }
 
-
+//Entrada: un Array de enteros que representa la secuencia de volteretas, un entero que representa la cantidad de volteretas y la nueva voltereta a agregar (entero).
+//Salida: Un array de enteros con un elemento adicional al de entrada. tamaño = n+1
+//Funcion: Agrega una voltereta a una secuencia de volteretas representadas por un array de enteros
 int *agregarVoltereta(int *volteretas, int n, int newVoltereta)
 {
     int *volteretasNew = (int *)malloc(sizeof(int) * (n + 1));
@@ -74,38 +87,50 @@ int *agregarVoltereta(int *volteretas, int n, int newVoltereta)
     return volteretasNew;
 }
 
+//Entrada: una estructura del tipo torrePizzas y el puntero a una estructura del tipo volteretas
+//Salida: no entrega ya que trabaja por referencia
+//Funcion: ordena una torre de mayor a menor realizando "volteretas" y guarda la secuencia de volteretas (indice desde donde se realiza)
 void ordenar(torrePizzas torre, volteretas * vueltas)
 {
     vueltas->cantidad = 0;
     vueltas->swaps = (int *)malloc(sizeof(int) * vueltas->cantidad);
-    int separador = 1;
+    int separador = 1; //separa el subgrupo ordenado y el desordenado, es el primer elemento del subgrupo desordenado
     int mayor;
+    //Cuando el separador llegue al valor de la cantidad de masas, quiere decir que no quedan elementos desordenados
     while (separador < torre.cantidad)
     {
+        //encuentra el mayor y verifica si es que está en la cima de la torre, si es asi realiza la voltereta desde el separador
         mayor = encontrarMayor(torre.masas, torre.cantidad, separador - 1);
         if (mayor + 1 == torre.cantidad)
         {
-            swap(torre.masas, torre.cantidad, separador);
-            vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,separador);
-            vueltas->cantidad++;
-            separador = separador + 1;
+            swap(torre.masas, torre.cantidad, separador); //voltereta desde el separador porque el mayor está en la cima
+            vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,separador); //se agrega la voltereta
+            vueltas->cantidad++; //se aumenta en 1 la cantidad de volteretas
+            separador = separador + 1; //se tiene un elemento ordenado adicional, por lo que el separador avanza a la siguiente posicion
         }
         else
         {
-            if (mayor + 1 != separador)
-            {
-                swap(torre.masas, torre.cantidad, mayor + 1);
-                vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,mayor+1);
-                vueltas->cantidad++;
-            }else
+            //si no está en la ultima posición puede estar justo en la posicion del separador, si es asi ya está ordenado, por lo que se avanza el separador
+            if (mayor + 1 == separador)
             {
                 separador++;
+            }else
+            //sino esta arriba ni abajo (separador), está entremedio por lo que habria que llevarlo arriba para que en la siguiente iteracion baje
+            {
+                swap(torre.masas, torre.cantidad, mayor + 1); //se lleva el mayor a la cima de la torre
+                vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,mayor+1);
+                vueltas->cantidad++;
+                //aca no se aumenta el separador porque aun no está ordenado
             }
             
         }
     }
 }
 
+
+//Entrada: estructura del tipo volteretas que contiene la secuencia de volteretas y la cantidad; el nombre del archivo de salida ("string").
+//Salida: Un archivo
+//Funcion: graba la secuencia de volteretas en un archivo
 void escribirArchivo(volteretas vueltas, char * nombreArchivo){
     FILE * archivo = fopen(nombreArchivo,"w");
     for (int i = 0; i < vueltas.cantidad; i++)
