@@ -84,6 +84,7 @@ int *agregarVoltereta(int *volteretas, int n, int newVoltereta)
         volteretasNew[i] = volteretas[i];
     }
     volteretasNew[n] = newVoltereta;
+    free(volteretas);
     return volteretasNew;
 }
 

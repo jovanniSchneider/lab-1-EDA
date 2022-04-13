@@ -15,7 +15,7 @@ La pizzeria nos entrega un archivo en el cual en su primera linea contiene un en
 y en la segunda linea contiene los diametros de las pizzas separados por espacios, teniendo este archivo hemos de generar un archivo de salida el cual
 contenga la secuencia de volteretas representadas por los indices desde donde se hacen las volteretas. Por ejemplo si tenemos la siguiente secuencia:
 V(3)->V(1)->V(5)->V(1)
-El contenido de nuestro archivo de salida debiese una sola linea con lo siguiente: 3 1 5 1
+El contenido de nuestro archivo de salida debiese ser una sola linea con lo siguiente: 3 1 5 1
 */
 
 //--------------------------------Tarea de laboratorio N°1--------------------------------------
