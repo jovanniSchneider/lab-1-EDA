@@ -24,10 +24,14 @@ El contenido de nuestro archivo de salida debiese una sola linea con lo siguient
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "funciones.h"
 
 int main(int argc, char * argv[])
 {
+    clock_t inicio;
+    clock_t final;
+    inicio = clock();
     torrePizzas torre; //se crea la base de las pizzas para poder guardar los datos
     char * nombreEntrada = argv[1];
     char * nombreSalida = argv[2];
@@ -46,6 +50,8 @@ int main(int argc, char * argv[])
     {
         printf("Error al leer el archivo\n");
     }
-
+    final = clock();
+    //double segundos = (double)(inicio - final) / CLOCKS_PER_SEC;
+    //printf("%f segundos de ejecucion\n",segundos);
     return 0;
 }
