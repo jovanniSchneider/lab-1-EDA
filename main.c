@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
         printf("Error al leer el archivo\n");
     }
     final = clock();
-    //double segundos = (double)(inicio - final) / CLOCKS_PER_SEC;
-    //printf("%f segundos de ejecucion\n",segundos);
+    double segundos = (double)(final-inicio) / CLOCKS_PER_SEC;
+    printf("%f segundos de ejecucion\n",segundos);
     return 0;
 }

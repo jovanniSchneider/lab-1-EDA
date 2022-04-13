@@ -28,8 +28,8 @@ void leerArchivo(char * nombreArchivo, torrePizzas *lectura)
     if (!(archivo == NULL))
     {
         lectura->sePudo = 1;
-        lectura->masas = (int *)malloc(sizeof(int) * lectura->cantidad);
         fscanf(archivo, "%d", &lectura->cantidad);
+        lectura->masas = (int *)malloc(sizeof(int) * lectura->cantidad);
         for (int i = 0; i < lectura->cantidad; i++)
         {
             fscanf(archivo, "%d", &lectura->masas[i]);
@@ -119,6 +119,8 @@ void ordenar(torrePizzas torre, volteretas * vueltas)
             //sino esta arriba ni abajo (separador), está entremedio por lo que habria que llevarlo arriba para que en la siguiente iteracion baje
             {
                 swap(torre.masas, torre.cantidad, mayor + 1); //se lleva el mayor a la cima de la torre
+                swap(torre.masas, torre.cantidad, separador); //voltereta desde el separador porque el mayor está en la cima
+                separador = separador + 1; //se tiene un elemento ordenado adicional, por lo que el separador avanza a la siguiente posicion
                 vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,mayor+1);
                 vueltas->cantidad++;
                 //aca no se aumenta el separador porque aun no está ordenado
