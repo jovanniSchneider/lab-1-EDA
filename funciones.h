@@ -120,10 +120,11 @@ void ordenar(torrePizzas torre, volteretas * vueltas)
             {
                 swap(torre.masas, torre.cantidad, mayor + 1); //se lleva el mayor a la cima de la torre
                 swap(torre.masas, torre.cantidad, separador); //voltereta desde el separador porque el mayor está en la cima
-                separador = separador + 1; //se tiene un elemento ordenado adicional, por lo que el separador avanza a la siguiente posicion
                 vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,mayor+1);
                 vueltas->cantidad++;
-                //aca no se aumenta el separador porque aun no está ordenado
+                vueltas->swaps = agregarVoltereta(vueltas->swaps,vueltas->cantidad,separador);
+                vueltas->cantidad++;
+                separador = separador + 1; //se tiene un elemento ordenado adicional, por lo que el separador avanza a la siguiente posicion
             }
             
         }
